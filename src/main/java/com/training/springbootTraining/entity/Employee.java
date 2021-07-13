@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Employee {
     //define fields
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="empno")
     private int id;
 

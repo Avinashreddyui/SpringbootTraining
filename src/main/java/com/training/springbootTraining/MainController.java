@@ -1,23 +1,44 @@
 package com.training.springbootTraining;
-import com.training.springbootTraining.dao.EmployeeDAO;
+
 import com.training.springbootTraining.entity.Employee;
+import com.training.springbootTraining.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 public class MainController {
-    private EmployeeDAO employeeDAO;
+
+    private MainService mainService;
 
     @Autowired
-    public MainController(EmployeeDAO theEmployeeDAO) {
-        employeeDAO = theEmployeeDAO;
+    public MainController(MainService theService) {
+        mainService = theService;
     }
 
-    @RequestMapping("/")
+//     to get all employees from table
+    @GetMapping("/employees")
     public List<Employee> findAll() {
-        return employeeDAO.findAll();
+        return mainService.findAll();
+    }
+
+//    // to get an employee from table using an Id
+    @GetMapping("/employees/{employeeId}")
+    public Employee findById(@PathVariable int employeeId) {
+
+        Employee theEmployee = mainService.findById(employeeId);
+        if(theEmployee == null) {
+            throw new RuntimeException("Employee id is not found" + employeeId);
+        }
+        return theEmployee;
+    }
+
+    @PostMapping("/employee")
+    public Employee addEmployee(@RequestBody Employee theEmployee) {
+
+        mainService.save(theEmployee);
+        return theEmployee;
     }
 }
